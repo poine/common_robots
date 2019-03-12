@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<robot name="common" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Sensors -->
+
+  <!-- Camera -->
+  <xacro:macro name="cs_camera_eachine" params="*origin">
+    <link name="camera_link">
+    <visual>
+      <xacro:if value="${high_definition_camera_visual}">
+	<origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
+        <geometry><mesh scale="1. 1. 1." filename="package://common_robots/meshes/eachine_camera.dae"/></geometry>
+      </xacro:if>
+      <xacro:unless value="${high_definition_wheel_visual}">
+	<geometry><cylinder radius="0.0025" length="0.01"/></geometry><origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+      </xacro:unless>
+    </visual>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <xacro:insert_block name="origin"/>
+    <parent link="base_link" />
+    <child link="camera_link" />
+  </joint>
+  </xacro:macro>
+
+
+  <!-- Smocap Infrared Marker -->
+  <xacro:macro name="cs_smocap_ir_marker" params="*origin">
+    <xacro:arg name="root_link" default="irm_link"/>
+    <xacro:arg name="mesh" default="ir_marker.dae"/>
+    <xacro:include filename="$(find smocap)/urdf/ir_marker.urdf.xacro" />
+    <xacro:ir_marker root_link="$(arg root_link)" mesh="$(arg mesh)"/>
+     
+    <xacro:property name="irm_z" value="0.06" />
+
+    <joint name="irm_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="chassis_link"/>
+      <child link="irm_link" />
+    </joint>
+  </xacro:macro>
+  
+</robot>
+
