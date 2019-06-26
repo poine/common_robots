@@ -5,21 +5,28 @@
 
   <!-- Camera -->
   <xacro:macro name="cs_camera_eachine" params="*origin">
-    <link name="camera_link">
+    <link name="camera1_link">
     <visual>
       <xacro:if value="${high_definition_camera_visual}">
 	<origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
         <geometry><mesh scale="1. 1. 1." filename="package://common_robots/meshes/eachine_camera.dae"/></geometry>
       </xacro:if>
-      <xacro:unless value="${high_definition_wheel_visual}">
+      <xacro:unless value="${high_definition_camera_visual}">
 	<geometry><cylinder radius="0.0025" length="0.01"/></geometry><origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
       </xacro:unless>
     </visual>
   </link>
-  <joint name="camera_joint" type="fixed">
+  <joint name="camera1_joint" type="fixed">
     <xacro:insert_block name="origin"/>
     <parent link="base_link" />
-    <child link="camera_link" />
+    <child link="camera1_link" />
+  </joint>
+  <link name="camera1_optical_frame">
+  </link>
+  <joint name="camera1_optical_frame_joint" type="fixed">
+    <origin rpy="${-pi/2} 0.0 ${-pi/2}" xyz="0.0 0.0 0.0"/>
+    <parent link="camera1_link"/>
+    <child link="camera1_optical_frame"/>
   </joint>
   </xacro:macro>
 
@@ -38,6 +45,21 @@
       <child link="irm_link" />
     </joint>
   </xacro:macro>
-  
+
+
+  <!-- Hokuyo 2D lidar -->
+  <xacro:macro name="cs_hokuyo" params="*origin">
+    <link name="hokuyo_link">
+      <visual>
+	<origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
+        <geometry><mesh scale="1. 1. 1." filename="package://common_robots/meshes/hokuyo.dae"/></geometry>
+      </visual>
+    </link>
+    <joint name="hokuyo_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="chassis_link"/>
+      <child link="hokuyo_link" />
+    </joint>
+  </xacro:macro>
 </robot>
 
