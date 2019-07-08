@@ -4,29 +4,29 @@
   <!-- Sensors -->
 
   <!-- Camera -->
-  <xacro:macro name="cs_camera_eachine" params="*origin">
-    <link name="camera1_link">
+  <xacro:macro name="cs_camera_eachine" params="cam_name origin_ref_frame *origin">
+    <link name="${cam_name}_link">
     <visual>
-      <xacro:if value="${high_definition_camera_visual}">
+      <xacro:if value="${cam_hd_visual}">
 	<origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
         <geometry><mesh scale="1. 1. 1." filename="package://common_robots/meshes/eachine_camera.dae"/></geometry>
       </xacro:if>
-      <xacro:unless value="${high_definition_camera_visual}">
+      <xacro:unless value="${cam_hd_visual}">
 	<geometry><cylinder radius="0.0025" length="0.01"/></geometry><origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
       </xacro:unless>
     </visual>
   </link>
-  <joint name="camera1_joint" type="fixed">
+  <joint name="${cam_name}_joint" type="fixed">
     <xacro:insert_block name="origin"/>
-    <parent link="base_link" />
-    <child link="camera1_link" />
+    <parent link="${origin_ref_frame}" />
+    <child link="${cam_name}_link" />
   </joint>
-  <link name="camera1_optical_frame">
+  <link name="${cam_name}_optical_frame">
   </link>
-  <joint name="camera1_optical_frame_joint" type="fixed">
+  <joint name="${cam_name}_optical_frame_joint" type="fixed">
     <origin rpy="${-pi/2} 0.0 ${-pi/2}" xyz="0.0 0.0 0.0"/>
-    <parent link="camera1_link"/>
-    <child link="camera1_optical_frame"/>
+    <parent link="${cam_name}_link"/>
+    <child link="${cam_name}_optical_frame"/>
   </joint>
   </xacro:macro>
 
