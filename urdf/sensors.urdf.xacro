@@ -61,5 +61,30 @@
       <child link="hokuyo_link" />
     </joint>
   </xacro:macro>
+
+  <!-- Rplidar 2D lidar -->
+  <!-- TODO: finish that, use correct DAE and link names -->
+  <xacro:macro name="cs_rplidar" params="*origin">
+    <link name="hokuyo_link">
+      <visual>
+	<origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
+        <geometry><mesh scale="1. 1. 1." filename="package://common_robots/meshes/hokuyo.dae"/></geometry>
+      </visual>
+    </link>
+    <joint name="hokuyo_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="chassis_link"/>
+      <child link="hokuyo_link" />
+    </joint>
+  </xacro:macro>
+
+  <!-- Velodyne VLP16 lidar -->
+  <xacro:macro name="cs_vlp16" params="*origin">
+    <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro"/>
+    <VLP-16 parent="base_link" name="velodyne" topic="/velodyne_points" hz="10" samples="1024" gpu="false" lasers="16" max_range="100">
+      <xacro:insert_block name="origin"/>
+    </VLP-16>
+  </xacro:macro> 
+
 </robot>
 
